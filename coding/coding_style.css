@@ -1,0 +1,83 @@
+/* coding_style.css */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #20202e;
+}
+::-webkit-scrollbar-thumb {
+    background: #4b4b60;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #5e5e78;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #181825;
+    color: #e0e0e0;
+    overflow: hidden;
+}
+
+.panel-bg { background-color: #20202e; }
+.editor-bg { background-color: #14141f; }
+.code-font { 
+    font-family: 'JetBrains Mono', monospace; 
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+
+/* Animations */
+.fade-in { animation: fadeIn 0.3s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Components */
+.line-numbers {
+    color: #5c5c70;
+    text-align: right;
+    padding-right: 1rem;
+    user-select: none;
+}
+
+/* Accordion / Toggle */
+.accordion-content {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    max-height: 1000px; /* Sufficient max-height */
+    opacity: 1;
+    overflow: hidden;
+}
+.accordion-content.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.chevron-rotate {
+    transition: transform 0.3s;
+}
+.chevron-rotate.collapsed {
+    transform: rotate(-90deg);
+}
+
+/* Layout */
+.layout-container {
+    display: grid;
+    grid-template-columns: 350px 1fr 400px;
+    height: calc(100vh - 48px);
+    transition: grid-template-columns 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.layout-container.expanded {
+    grid-template-columns: 0px 1fr 400px;
+}

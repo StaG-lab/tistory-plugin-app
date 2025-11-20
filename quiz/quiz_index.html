@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <link rel="stylesheet" href="quiz_style.css">
+</head>
+<body>
+    <div class="quiz-container" data-iframe-height>
+        <div class="quiz-header">
+            <h1 class="quiz-title">코딩 퀴즈</h1>
+            <p class="question" id="questionText">Loading question...</p>
+        </div>
+
+        <form id="quizForm">
+            <div class="options" id="optionsContainer"></div>
+            <button type="submit" class="submit-btn" id="submitBtn">제출하기</button>
+        </form>
+
+        <div class="result" id="result">
+            <h2 class="result-title" id="resultTitle"></h2>
+            <div class="result-text" id="resultBody"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.2/iframeResizer.contentWindow.min.js"></script>
+    <script type="module" src="quiz_script.js"></script>
+</body>
+</html>

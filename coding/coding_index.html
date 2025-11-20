@@ -1,0 +1,193 @@
+<!-- coding_index.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Practice App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="coding_style.css">
+</head>
+<body>
+
+    <!-- 1. Title Bar -->
+    <header class="h-12 bg-[#181825] flex items-center justify-between px-4 border-b border-[#2d2d3f] select-none">
+        <div class="flex items-center space-x-4">
+            <button class="text-gray-400 hover:text-white transition"><i class="fas fa-bars"></i></button>
+            <button class="text-gray-400 hover:text-white transition"><i class="fas fa-arrow-left"></i></button>
+            <div class="text-sm text-gray-400 flex items-center space-x-2">
+                <span id="header-title">1. Loading...</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <!-- Settings -->
+            <div class="relative">
+                <button id="btn-settings" class="text-gray-400 hover:text-white transition p-2"><i class="fas fa-cog"></i></button>
+                <div id="language-dropdown" class="absolute right-0 mt-2 w-32 bg-[#2a2a3b] rounded shadow-lg hidden z-50 border border-[#3e3e50]">
+                    <button onclick="setLanguage('ko')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#3e3e50]">한국어</button>
+                    <button onclick="setLanguage('en')" class="block w-full text-left px-4 py-2 text-sm hover:bg-[#3e3e50]">English</button>
+                </div>
+            </div>
+            <!-- Fullscreen -->
+            <button id="btn-fullscreen" class="text-gray-400 hover:text-white transition p-2"><i class="fas fa-expand"></i></button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="layout-container" id="main-layout">
+        <!-- 2. Goals Panel -->
+        <aside class="panel-bg border-r border-[#2d2d3f] flex flex-col overflow-hidden relative" id="goals-panel">
+            <div class="p-4 border-b border-[#2d2d3f] flex justify-between items-center">
+                <h2 class="font-bold text-lg" id="panel-title">...</h2>
+                <i class="fas fa-check text-gray-500"></i>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+                <!-- Goals -->
+                <div class="relative pl-4 border-l-4 border-green-500">
+                    <div class="flex justify-between items-center cursor-pointer mb-2" onclick="toggleAccordion('goals-content', 'goals-chevron')">
+                        <span class="font-semibold text-gray-300 uppercase text-xs tracking-wider" id="label-goals">GOALS</span>
+                        <i id="goals-chevron" class="fas fa-caret-down text-gray-400 chevron-rotate"></i>
+                    </div>
+                    <div id="goals-content" class="accordion-content text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+                <!-- Hints -->
+                <div class="relative pl-4 border-l-4 border-gray-700">
+                    <div class="flex justify-between items-center cursor-pointer mb-2" onclick="toggleAccordion('hints-content', 'hints-chevron')">
+                        <span class="font-semibold text-gray-300 uppercase text-xs tracking-wider" id="label-hints">HINTS</span>
+                        <i id="hints-chevron" class="fas fa-caret-down text-gray-400 chevron-rotate collapsed"></i>
+                    </div>
+                    <div id="hints-content" class="accordion-content collapsed text-sm text-gray-300"></div>
+                </div>
+                <!-- Checks -->
+                <div class="relative pl-4 border-l-4 border-gray-700">
+                    <div class="flex justify-between items-center cursor-pointer mb-2" onclick="toggleAccordion('checks-content', 'checks-chevron')">
+                        <span class="font-semibold text-gray-300 uppercase text-xs tracking-wider" id="label-checks">CHECKS</span>
+                        <i id="checks-chevron" class="fas fa-caret-down text-gray-400 chevron-rotate collapsed"></i>
+                    </div>
+                    <div id="checks-content" class="accordion-content collapsed text-sm text-gray-300"></div>
+                </div>
+            </div>
+            <button class="w-full py-3 border-t border-[#2d2d3f] text-left px-4 text-sm font-semibold hover:bg-[#2a2a3b] transition flex items-center">
+                <i class="fas fa-list mr-2"></i> <span id="btn-practice-list">...</span>
+            </button>
+        </aside>
+
+        <!-- 3. Editor Panel -->
+        <section class="editor-bg flex flex-col relative">
+            <div class="flex-1 flex relative overflow-hidden">
+                <div class="w-12 py-4 bg-[#14141f] code-font text-sm line-numbers select-none">1<br>2<br>3<br>4<br>5</div>
+                <textarea id="code-editor" spellcheck="false" class="flex-1 bg-[#14141f] text-gray-200 p-4 pl-0 code-font text-sm outline-none resize-none leading-6 border-none"></textarea>
+                <button id="btn-expand" onclick="toggleExpand()" class="absolute bottom-4 right-4 bg-[#2a2a3b] hover:bg-[#3e3e50] text-gray-400 hover:text-white p-2 rounded transition z-10 border border-[#3e3e50]">
+                    <i class="fas fa-expand-alt"></i>
+                </button>
+            </div>
+            <div class="h-auto min-h-[80px] bg-[#20202e] p-3 grid grid-cols-3 gap-2 border-t border-[#2d2d3f]">
+                <button onclick="runCode()" id="btn-run" class="bg-[#2c2c40] hover:bg-[#3e3e50] text-white font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#1a1a26] active:border-b-0 active:translate-y-1 transition-all"><i class="fas fa-play"></i> <span>Run</span></button>
+                <button class="bg-[#2c2c40] text-gray-500 cursor-not-allowed font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#1a1a26]"><i class="fas fa-pause"></i> <span>Pause</span></button>
+                <button onclick="resetCode()" id="btn-reset" class="bg-[#2c2c40] hover:bg-[#3e3e50] text-gray-400 font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#1a1a26] active:border-b-0 active:translate-y-1 transition-all"><i class="fas fa-times"></i> <span>Reset</span></button>
+                <button onclick="toggleSolution()" id="btn-solution" class="bg-[#2c2c40] hover:bg-[#3e3e50] text-gray-400 font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#1a1a26] active:border-b-0 active:translate-y-1 transition-all"><i class="fas fa-question"></i> <span>Solution</span></button>
+                <button onclick="toggleOutput()" id="btn-output" class="bg-[#4c78dd] hover:bg-[#5d89ee] text-white font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#2a4ba0] active:border-b-0 active:translate-y-1 transition-all ring-2 ring-cyan-400"><i class="fas fa-terminal"></i> <span>Output</span></button>
+                <button class="bg-[#2c2c40] hover:bg-[#3e3e50] text-gray-400 font-bold py-2 px-4 rounded flex items-center justify-center space-x-2 border-b-4 border-[#1a1a26] active:border-b-0 active:translate-y-1 transition-all"><i class="fas fa-arrow-right"></i> <span>Continue</span></button>
+            </div>
+        </section>
+
+        <!-- 4. Result Panel -->
+        <aside class="bg-[#181825] flex flex-col border-l border-[#2d2d3f] relative">
+            <div class="flex-1 bg-[#181825] flex items-center justify-center relative p-4">
+                <div class="w-full aspect-[4/3] bg-[#20202e] rounded-lg border-4 border-[#ffad3b] flex items-center justify-center relative overflow-hidden shadow-lg">
+                    <div class="text-center"><i class="fas fa-robot text-6xl text-gray-400 mb-2 animate-bounce"></i><div class="text-[#ffad3b] font-bold mt-2 tracking-widest">GDQUEST</div></div>
+                    <div id="visual-success-overlay" class="absolute inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20 flex-col"><i class="fas fa-robot text-6xl text-white mb-2 animate-pulse"></i><div class="text-white font-bold text-xl italic">GDQUEST BOY</div></div>
+                </div>
+            </div>
+            <!-- Solution Overlay -->
+            <div id="solution-overlay" class="hidden absolute inset-0 bg-[#181825] z-30 p-4 flex flex-col fade-in">
+                <div class="flex justify-between items-center mb-4"><h3 class="text-white font-bold" id="txt-suggested-solution">Suggested Solution</h3><button onclick="toggleSolution()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button></div>
+                <div class="bg-[#14141f] p-4 rounded flex-1 code-font text-sm text-green-400">func this_code_is_wrong():<br>&nbsp;&nbsp;&nbsp;&nbsp;return</div>
+                <div class="mt-4 flex justify-end"><button onclick="applySolution()" class="bg-[#2c2c40] text-white px-4 py-2 rounded border border-[#3e3e50] hover:bg-[#3e3e50]" id="btn-use-solution">Use Solution</button></div>
+            </div>
+            <!-- Output Console -->
+            <div id="output-panel" class="h-1/3 bg-[#20202e] border-t border-[#2d2d3f] p-4 overflow-y-auto relative transition-all duration-300">
+                <div class="flex justify-between items-start mb-2"><span class="font-bold text-gray-400 text-sm">Output</span></div>
+                <div id="output-empty" class="text-gray-600 text-sm italic">Run code to see output...</div>
+                <div id="output-error" class="hidden">
+                    <div class="bg-[#2d1b22] border border-[#5c2b2f] p-3 rounded mb-2 flex justify-between items-start">
+                        <div class="text-[#ff5f5f] text-sm code-font">ERROR: Indented block expected after declaration of "this_code_is_wrong" function.</div>
+                        <button onclick="showErrorExplain()" class="ml-2 bg-[#3e2a30] hover:bg-[#4f353d] text-[#ff9f9f] text-xs px-2 py-1 rounded border border-[#5c2b2f] transition">Explain</button>
+                    </div>
+                    <div class="text-gray-500 text-xs mt-2 cursor-pointer hover:text-gray-300 hover:underline flex items-center" onclick="showExtraInfo()"><span>Sometimes errors are reported outside of your code. Why does that happen?</span><i class="fas fa-external-link-alt ml-1 text-[10px]"></i></div>
+                </div>
+                <div id="output-success" class="hidden text-green-400 text-sm code-font">> Build Successful.<br>> Running...<br>> OK.</div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- 1. Error Explanation Popup (Refactored) -->
+    <div id="popup-explain" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-[#20202e] w-[500px] rounded-lg shadow-2xl border border-[#3e3e50] overflow-hidden slide-up">
+            <div class="p-4 bg-[#2c2c40] border-b border-[#3e3e50] flex justify-between">
+                <h3 class="text-[#5c9dff] font-bold text-sm" id="txt-err-title">Error</h3>
+                <button onclick="hidePopup('popup-explain')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                <!-- Section 1: Why -->
+                <div>
+                    <div class="flex justify-between items-center border-b border-[#3e3e50] pb-2 mb-2 cursor-pointer" onclick="toggleAccordion('why-content', 'why-chevron')">
+                        <h4 class="font-bold text-white" id="txt-why-happens">Why this happens</h4>
+                        <i id="why-chevron" class="fas fa-caret-down text-gray-400 chevron-rotate"></i>
+                    </div>
+                    <div id="why-content" class="accordion-content">
+                        <p class="text-sm text-gray-300" id="txt-err-desc1">...</p>
+                        <p class="text-sm text-gray-300 mt-2" id="txt-err-desc2">...</p>
+                    </div>
+                </div>
+                <!-- Section 2: How to fix (Updated with Toggle) -->
+                <div>
+                    <div class="flex justify-between items-center border-b border-[#3e3e50] pb-2 mb-2 cursor-pointer" onclick="toggleAccordion('fix-content', 'fix-chevron')">
+                        <h4 class="font-bold text-gray-400" id="txt-how-fix">How to fix this</h4>
+                        <i id="fix-chevron" class="fas fa-caret-down text-gray-400 chevron-rotate collapsed"></i>
+                    </div>
+                    <div id="fix-content" class="accordion-content collapsed">
+                         <p class="text-sm text-gray-300 leading-relaxed" id="how-fix-content">
+                             <!-- Content injected via JS -->
+                         </p>
+                    </div>
+                </div>
+                <div class="flex justify-center mt-4">
+                    <button onclick="hidePopup('popup-explain')" class="px-6 py-2 border border-[#4b4b60] rounded text-gray-300 hover:bg-[#3e3e50] hover:text-white transition font-bold uppercase text-sm">Hide</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Extra Info Popup -->
+    <div id="popup-extra" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-[#20202e] w-[600px] rounded-lg shadow-2xl border border-[#3e3e50] p-8 text-center slide-up">
+            <h3 class="text-xl font-bold text-white mb-4" id="txt-extra-title">...</h3>
+            <p class="text-gray-300 text-sm mb-4 text-left leading-relaxed" id="txt-extra-desc">...</p>
+            <button onclick="hidePopup('popup-extra')" class="bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-8 rounded transition transform active:scale-95">Got it!</button>
+        </div>
+    </div>
+
+    <!-- 3. Success Popup -->
+    <div id="popup-success" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-[#20202e] w-[400px] rounded-lg shadow-2xl border border-[#3e3e50] p-6 text-center slide-up relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-blue-500"></div>
+            <h3 class="text-2xl font-bold text-white mb-2" id="txt-success-title">Well done!</h3>
+            <p class="text-gray-400 text-sm mb-6" id="txt-success-msg">...</p>
+            <div class="flex justify-center space-x-4">
+                <button onclick="hidePopup('popup-success')" class="px-6 py-2 border border-[#4b4b60] rounded text-gray-300 hover:bg-[#3e3e50] hover:text-white transition font-bold">Stay</button>
+                <button class="px-6 py-2 bg-green-500 text-black rounded hover:bg-green-400 transition font-bold border border-green-600" onclick="location.reload()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script src="coding_script.js"></script>
+</body>
+</html>
