@@ -1,0 +1,182 @@
+/* 기본 설정 및 다크 테마 변수 */
+:root {
+    --bg-dark: #1e1e2e;
+    --bg-panel: #13131f;
+    --bg-editor: #0f0f16;
+    --text-main: #c9d1d9;
+    --accent-primary: #4a4a6a;
+    --accent-secondary: #2a2a3d;
+    --color-aqua: #00ffff;
+    --color-func: #57a6ff; /* 파란색 함수 */
+    --color-num: #ff9f43;  /* 주황색 숫자 */
+    --color-prop: #ff6b6b; /* 붉은색 속성 */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    width: 900px;
+    height: 500px;
+    background-color: var(--bg-panel);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+/* --- 왼쪽 캔버스 패널 --- */
+.canvas-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #181824;
+    border-right: 2px solid #2a2a3d;
+}
+
+.canvas-wrapper {
+    flex: 1;
+    background-color: #0b0b12;
+    /* 캔버스 배경 패턴 (도트/그리드 느낌) */
+    background-image: 
+        radial-gradient(#2a2a3d 15%, transparent 16%),
+        radial-gradient(#2a2a3d 15%, transparent 16%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+canvas {
+    /* 캔버스가 컨테이너에 맞게 반응형으로 보일 수 있으나, 
+       여기서는 고정 픽셀 매칭을 위해 JS로 제어 */
+    border-radius: 50%; /* 원형 마스킹이 필요하면 사용, 여기선 사각형 캔버스 */
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.btn-secondary {
+    background-color: #2a2a3d;
+    color: #888;
+}
+.btn-secondary:hover {
+    background-color: #3a3a4f;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: transparent;
+    border: 2px solid #4a4a6a;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #4a4a6a;
+    border-color: #5a5a7f;
+}
+
+/* --- 오른쪽 에디터 패널 --- */
+.editor-panel {
+    width: 400px;
+    background-color: var(--bg-editor);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-container {
+    display: flex;
+    height: 100%;
+    position: relative;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* 줄 번호 */
+.line-numbers {
+    width: 30px;
+    text-align: right;
+    color: #444;
+    padding-right: 10px;
+    user-select: none;
+}
+
+.code-wrapper {
+    flex: 1;
+    position: relative;
+    height: 100%;
+}
+
+/* 하이라이팅(pre)과 에디터(textarea) 겹치기 */
+textarea, pre {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    white-space: pre-wrap; /* 줄바꿈 허용 */
+    word-wrap: break-word;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* 텍스트 영역: 글자색은 투명하게 하여 caret(커서)만 보이게 함 */
+textarea {
+    color: transparent;
+    caret-color: white;
+    z-index: 2;
+    resize: none;
+    outline: none;
+}
+
+/* 하이라이팅 영역: 텍스트가 실제로 보이는 곳 */
+pre {
+    z-index: 1;
+    pointer-events: none; /* 클릭은 textarea로 통과 */
+    color: var(--text-main);
+}
+
+/* Syntax Highlighting Colors */
+.token-func { color: var(--color-func); } /* draw_circle, Vector2 */
+.token-num { color: var(--color-num); }   /* 60, 0 */
+.token-prop { color: var(--color-prop); } /* Color.aqua */

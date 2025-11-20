@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Code Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 왼쪽: 캔버스 패널 -->
+        <div class="canvas-panel">
+            <div class="canvas-wrapper">
+                <canvas id="mainCanvas" width="400" height="400"></canvas>
+            </div>
+            <div class="controls">
+                <button id="btnReset" class="btn btn-secondary">Reset</button>
+                <button id="btnDraw" class="btn btn-primary">draw_circle()</button>
+            </div>
+        </div>
+
+        <!-- 오른쪽: 에디터 패널 -->
+        <div class="editor-panel">
+            <div class="editor-container">
+                <div class="line-numbers" id="lineNumbers">1</div>
+                <div class="code-wrapper">
+                    <!-- 하이라이팅을 보여주는 레이어 -->
+                    <pre id="codeHighlighting" aria-hidden="true"><code class="language-custom" id="codeOutput"></code></pre>
+                    <!-- 실제 입력을 받는 레이어 (투명) -->
+                    <textarea id="codeEditor" spellcheck="false" autocomplete="off"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
